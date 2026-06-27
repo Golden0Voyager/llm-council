@@ -1,16 +1,24 @@
 """FastAPI backend for LLM Council."""
 
+import asyncio
+import json
+import uuid
+from typing import Any
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import List, Dict, Any
-import uuid
-import json
-import asyncio
 
 from . import storage
-from .council import run_full_council, generate_conversation_title, stage1_collect_responses, stage2_collect_rankings, stage3_synthesize_final, calculate_aggregate_rankings
+from .council import (
+    calculate_aggregate_rankings,
+    generate_conversation_title,
+    run_full_council,
+    stage1_collect_responses,
+    stage2_collect_rankings,
+    stage3_synthesize_final,
+)
 
 app = FastAPI(title="LLM Council API")
 
@@ -47,7 +55,7 @@ class Conversation(BaseModel):
     id: str
     created_at: str
     title: str
-    messages: List[Dict[str, Any]]
+    messages: list[dict[str, Any]]
 
 
 @app.get("/")
@@ -56,7 +64,7 @@ async def root():
     return {"status": "ok", "service": "LLM Council API"}
 
 
-@app.get("/api/conversations", response_model=List[ConversationMetadata])
+@app.get("/api/conversations", response_model=list[ConversationMetadata])
 async def list_conversations():
     """List all conversations (metadata only)."""
     return storage.list_conversations()
