@@ -12,6 +12,15 @@ wheels/
 # Keys and secrets
 .env
 
+# Toolchain caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
 # Data files
 data/
 
